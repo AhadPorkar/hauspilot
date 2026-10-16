@@ -14,7 +14,7 @@ A polished, open-source portfolio demonstrator for German property-management wo
 - Search, filtering, contextual shortcuts, demonstrable frontend preview even without a backend connection.
 
 ## Requirements
-Docker Engine with Docker Compose (recommended), or Java 21 + Maven 3.9 + Node 22 + PostgreSQL 18.
+Docker Engine with Docker Compose (recommended), or Java 21 + Maven 3.9 + Node 24 (LTS) + PostgreSQL 18.
 
 ## Quick start — complete stack
 ```bash
@@ -40,6 +40,8 @@ Open http://localhost:5173. Backend demo defaults are `admin` / `change-me-befor
 cd backend && mvn test
 cd frontend && npm install && npm test && npm run build
 ```
+**CI note:** The first release omitted `frontend/package-lock.json`, causing `setup-node` caching to fail before frontend tests started. This revision fixes the workflow and aligns Vite 8 dependencies. On a networked machine, run `cd frontend && npm install` and commit `frontend/package-lock.json` to enable reproducible `npm ci` installs and re-enable CI caching. See `docs/CI-TROUBLESHOOTING-EN-DE.md` for exact steps.
+
 GitHub Actions runs unit tests and the frontend production build on push/PR. See `docs/ARCHITECTURE.md`, `docs/USER-GUIDE-EN.md`, `docs/BENUTZERHANDBUCH-DE.md`, `docs/API.md`, `docs/PRODUCTION-ROADMAP.md`.
 
 ## API examples
