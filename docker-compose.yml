@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:18.6
+    environment:
+      POSTGRES_DB: hauspilot
+      POSTGRES_USER: hauspilot
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-local_dev_only}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hauspilot"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+  api:
+    build: ./backend
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/hauspilot
+      DB_USER: hauspilot
+      DB_PASSWORD: ${DB_PASSWORD:-local_dev_only}
+      APP_USER: ${APP_USER:-admin}
+      APP_PASSWORD: ${APP_PASSWORD:-change-me-before-deploy}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8080:8080"
+  web:
+    build: ./frontend
+    depends_on:
+      - api
+    ports:
+      - "127.0.0.1:3000:80"
+volumes:
+  dbdata:

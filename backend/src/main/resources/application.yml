@@ -1,0 +1,19 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/hauspilot}
+    username: ${DB_USER:hauspilot}
+    password: ${DB_PASSWORD:local_dev_only}
+  flyway:
+    enabled: true
+  jackson:
+    default-property-inclusion: non_null
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+app:
+  demo-user: ${APP_USER:admin}
+  demo-password: ${APP_PASSWORD:change-me-before-deploy}
